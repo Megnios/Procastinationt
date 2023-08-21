@@ -77,8 +77,12 @@ def main():
 
     with open("agenda.txt", "w") as archivo:
         
+        archivo.write(fechaHoy)
         for key, value in actividades.items():
-            archivo.write(fechaHoy)
+            archivo.write(key)
+            archivo.write(str(value[0]))
+            archivo.write(str(value[1]))
+            archivo.write("\n")
         
 
 
