@@ -8,6 +8,8 @@ MINUTO_INICIO = 1
 HORA_LIMITE = 2
 MINUTO_LIMITE = 3
 
+
+
 def intConvertor(lista : list) -> None:
 
     for i in range(len(lista)):
@@ -63,7 +65,8 @@ def parsearHorario(fecha, usuario):
     fecha.append(fecha[MINUTO_INICIO])
     fecha[MINUTO_LIMITE] += usuario
 
-    while fecha[MINUTO_LIMITE] >= 60:
+    if fecha[MINUTO_LIMITE] >= 60:
+
         fecha[MINUTO_LIMITE] -= 60
         fecha[HORA_LIMITE] += 1
     
@@ -90,9 +93,6 @@ def main():
     pedirActividades(actividades)
     definirHorarios(actividades)
 
-    for key, value in actividades.items():
-
-        print(f'{key} de {value[0]}:{value[1]} a {value[2]}:{value[3]}')
 
     with open("agenda.txt", "a") as archivo:
         
