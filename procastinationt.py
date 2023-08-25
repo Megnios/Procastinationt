@@ -1,4 +1,4 @@
-from datetime import date, time, datetime
+from datetime import datetime
 from random import randrange
 
 VACIO = ""
@@ -87,27 +87,61 @@ def definirHorarios(actividades):
 
         
 
+def leerHorarios(archivo):
+
+    fechaHoyEncontrada = False
+    lineas = archivo.readlines()
+    i = 0
+
+    while(i < len(lineas) and not fechaHoyEncontrada):
+
+        try:
+            linea = str(lineas[i].strip("\n"))
+            fecha = datetime.strptime(linea,"%d/%m/%Y").strftime("%d/%m/%Y")
+            fechaHoy = datetime.now().strftime('%d/%m/%Y')
+            
+            if fecha == fechaHoy:
+               print(f'El día de hoy {fechaHoy} las actividades son las siguientes:\n')
+               print(f'{lineas[i + 2]}')
+               print(f'{lineas[i + 3]}')
+               fechaHoyEncontrada = True
+        
+        except:
+            continue
+
+        finally:
+            i += 1
+        
+    return fechaHoyEncontrada
+        
+
+
+
 def main():
 
-    actividades = {}
-    pedirActividades(actividades)
-    definirHorarios(actividades)
+    with open("agenda.txt", "r") as archivo:
+        fechaHoyEncontrada = leerHorarios(archivo)
 
+    if not fechaHoyEncontrada:
+        with open("agenda.txt", "a") as archivo:
 
-    with open("agenda.txt", "a") as archivo:
+            actividades = {}
+            pedirActividades(actividades)
+            definirHorarios(actividades) 
+
+            fechaHoy = datetime.now().strftime('%d/%m/%Y') + "\n"
+            archivo.write(fechaHoy)
+            archivo.write("----------------------------------------------------------------\n")
+
+            for key, value in actividades.items():
+                lineaAEscribir = key + " de "
+                lineaAEscribir += str(value[0]) + ":" + str(value[1]) + " a " + str(value[2]) + ":" + str(value[3])
+                lineaAEscribir += "\n"
+
+                archivo.write(lineaAEscribir)
+                
+                archivo.write("\n\n")
+
         
-        fechaHoy = datetime.now().strftime('%d/%m/%Y') + "\n----------------------------------------------------------------\n"
-        archivo.write(fechaHoy)
-
-        for key, value in actividades.items():
-            lineaAEscribir = key + "->"
-            lineaAEscribir += str(value[0]) + ":" + str(value[1])
-            lineaAEscribir += "\n"
-
-            archivo.write(lineaAEscribir)
-        
-        archivo.write("\n\n")
-        
-
 
 main()
